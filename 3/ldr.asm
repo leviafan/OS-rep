@@ -12,14 +12,14 @@ mov bx,1
 
 jc cant_read
 
-mov bp, offset hello
+mov bp,hello
 mov cx,16
 mov ah,13h
 mov dx,0
 int 10h
 jmp fin
 cant_read:
-mov bp, offset errmess
+mov bp,errmess
 mov cx,34
 mov ah,13h
 mov dx,0
@@ -28,7 +28,8 @@ fin:
 cli
 hlt
 
-errmess db "Can't read sector from diskette",13,10,'$'
-db 510-($-$$) dup(0)
-db 55h,0aah
-hello db "Hello, world!",13,10,'$'
+errmess db "Can't read sector from diskette"
+ TIMES 510 - ($ - $$) db 0
+ db 55h,0aah
+hello db "Hello, world!"
+ TIMES	1024 - ($ - $$) db 0
