@@ -27,9 +27,9 @@ int 10h
 fin:
 cli
 hlt
-
+hello
 errmess db "Can't read sector from diskette"
  TIMES 510 - ($ - $$) db 0
  db 55h,0aah
-hello db "Hello, world!"
+ db "Hello, world!"
  TIMES	1024 - ($ - $$) db 0
