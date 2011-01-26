@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int error_code=0;
-
 int show_mess(char *mess){
     return printf("%s",mess);
 }
@@ -14,15 +12,8 @@ int cmp(const void *a, const void *b){
 
 int main(int argc, char *argv[]){
     FILE *r_file;
-    int *heap_with_numbers=NULL;
-    int *tmp_heap;
-    int unit=0;
-    int unit_number=0;
-    int file_cntr = 1;
-    int argum = argc;
-    int check;
-    char dummy;
-    char str[50];
+    int i, check, *tmp_heap, *heap_with_numbers=NULL, error_code=0, unit=0, unit_number=0, file_cntr=1, argum=argc;
+    char dummy, str[50];
     if (argc<2){
         if (!show_mess("\nToo few arguments. I need one file at least")) error_code=1;
         return error_code;
@@ -32,6 +23,7 @@ int main(int argc, char *argv[]){
         if (!r_file){
             strcpy (str,"\nCan't open for read file: ");
             if (!show_mess(strcat(str,argv[file_cntr]))) error_code=1;
+            return error_code;
         }
         while (!feof(r_file)){
             if (!fscanf (r_file,"%i ",&unit)){
@@ -47,8 +39,9 @@ int main(int argc, char *argv[]){
             else{
                 free (heap_with_numbers);
                 fclose(r_file);
-                if (!show_mess("\nCan't realloc memory")) error_code=1;
-          }
+                if (!show_mess("\nCan't realloc memory. ")) error_code=1;
+                return error_code;
+            }
             unit_number++;
         }
         fclose(r_file);
@@ -60,8 +53,9 @@ int main(int argc, char *argv[]){
     if (!r_file){
         strcpy (str,"\nCan't open for write file: ");
         if (!show_mess(strcat(str,argv[argc-1]))) error_code=1;
+        free(heap_with_numbers);
+        return error_code; 
     }
-    int i;
     for(i=0;i<unit_number;i++){
         
         if (!fprintf (r_file,"%i ",heap_with_numbers[i])){
@@ -73,5 +67,4 @@ int main(int argc, char *argv[]){
     fclose(r_file);
     free(heap_with_numbers);
     return error_code;
-    return 0;
 }
