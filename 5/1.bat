@@ -1,0 +1,1 @@
+arrays.exe >1.txt
