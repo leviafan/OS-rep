@@ -1,7 +1,7 @@
 org 7c00h
 xor ax,ax
 mov es,ax
-mov ax,0202h
+mov ax,0203h
 mov cx,0002h
 mov dx,0
 mov bx,_2ndseg
@@ -39,27 +39,33 @@ mov cr0, eax
 
 jmp 8:tend
 GDT:
-NULL_DESCR	TIMES 8 db 0
-CODE_DESCR  0FFh, 0FFh, 00h, 00h, 00h, 9Ah, 00h, 00h
-VIDEO_DESCR  00h,  10h, 00h, 80h, 0Bh, 02h, 00h, 00h
+  TIMES 8 db 0
+code  db 0FFh, 0FFh, 00h, 00h, 00h, 9Ah, 00h, 00h
+  db 00h,  00h, 00h, 80h, 0Bh, 02h, 00h, 00h
 tsize dw $-GDT
 GDTR    dw tsize
-        dd GDT
+        dw GDT
+		dw 0
 IDTR    dw 800h
-        dd IDT
+        dw IDT
+		dw 0
 
 tend:
 xor ax, ax
 mov ds, ax
 mov ss, ax
+mov es, ax
 mov di, ax
 sti
 
-LLDT [CODE_DESCR] ;GP, here we go! 
-
 cli
 hlt
-
+	mov bx,0
+	div bx
+int 0Dh
+;LLDT [code] ;GP, here we go! 
+cli 
+hlt
 other_int:
 	mov si, other
 	mov cx,	22
@@ -68,14 +74,21 @@ int_GP:
 	mov si, protected
 	mov cx, 17
 cont:
-	mov ax, 00010000b
+	mov ax, 10h
 	mov es, ax
-	mov	al, 07h
+	xor di, di
+	mov ds, di
+	mov	al, 02h
 print:
 	movsb
 	stosb
 	loop	print
+_end:
+cli
+hlt
+iret
 
+times	1024 - ($ - $$) db 0
 IDT:
   times 13  dw other_int, 8, 1000011000000000b, 0
             dw int_GP, 8, 1000011000000000b, 0
