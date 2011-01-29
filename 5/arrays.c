@@ -36,7 +36,8 @@ int main(){
     }
 
     final = clock();
-    fprintf(out,"1st method: %.2f\n", (float)(mid_end - start));
-    fprintf(out,"2nd method: %.2f\n", (float)(final - mid_end));
+    if (!fprintf(out,"1st method: %.2f\n", (float)(mid_end - start))){ fclose(out); return 2;} //can't write into outfile
+    if (!fprintf(out,"2nd method: %.2f\n", (float)(final - mid_end))){ fclose(out); return 2;} //can't write into outfile
+    fclose(out);
     return 0;
 }
