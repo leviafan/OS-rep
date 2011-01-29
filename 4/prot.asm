@@ -1,19 +1,18 @@
 org 7c00h
 xor ax,ax
 mov es,ax
-mov ax,0203h
+mov ax,0204h
 mov cx,0002h
 mov dx,0
 mov bx,_2ndseg
 int 13h
 
-mov al,1
-mov bx,1
 
 jc cant_read
-
 jmp _2ndseg
 cant_read:
+mov al,1
+mov bx,1
 mov bp,errmess
 mov cx,32
 mov ah,13h
@@ -32,7 +31,6 @@ _2ndseg:
 cli
 LGDT [GDTR]
 LIDT [IDTR]
-
 mov eax, cr0
 or al, 1
 mov cr0, eax
@@ -40,26 +38,22 @@ mov cr0, eax
 jmp 8:tend
 GDT:
   TIMES 8 db 0
-code  db 0FFh, 0FFh, 00h, 00h, 00h, 9Ah, 00h, 00h
-  db 00h,  00h, 00h, 80h, 0Bh, 02h, 00h, 00h
+code  db 0FFh, 0FFh, 00h, 00h, 00h, 10011010b, 00h, 00h
+      db  00h,  00h, 00h, 80h, 0Bh, 02h, 00h, 00h
 tsize dw $-GDT
 GDTR    dw tsize
-        dw GDT
-		dw 0
+        dd GDT
 IDTR    dw 800h
-        dw IDT
-		dw 0
+        dd IDT
 
 tend:
 xor ax, ax
 mov ds, ax
-mov ss, ax
 mov es, ax
 mov di, ax
 sti
 
-cli
-hlt
+
 	mov bx,0
 	div bx
 int 0Dh
