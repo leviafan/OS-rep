@@ -39,7 +39,7 @@ jmp 8:tend
 GDT:
   TIMES 8 db 0
 code  db 0FFh, 0FFh, 00h, 00h, 00h, 10011010b, 00h, 00h
-      db  00h,  00h, 00h, 80h, 0Bh, 02h, 00h, 00h
+      db  00h,  00h, 00h, 80h, 0Bh, 10011010b, 00h, 00h
 tsize dw $-GDT
 GDTR    dw tsize
         dd GDT
@@ -54,10 +54,7 @@ mov di, ax
 sti
 
 
-	mov bx,0
-	div bx
-int 0Dh
-;LLDT [code] ;GP, here we go! 
+LLDT [code] ;GP, here we go! 
 cli 
 hlt
 other_int:
