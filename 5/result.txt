@@ -1,2 +1,2 @@
-1st method: 360.00
-2nd method: 421.00
+1st method: 328.00
+2nd method: 172.00

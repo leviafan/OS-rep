@@ -5,7 +5,7 @@ int main(){
     if (!out){
         return 1; //can't open result file for write          
     }
-    int Arra[7000][70],i,j,l;
+    volatile int Arra[7000][70],i,j,l;
     clock_t start,mid_end,final;
 
     for (i=0;i<70;i++){
